@@ -1,0 +1,42 @@
+function ca= no_overlapping_patch(img,X,Y)
+[row,col]=size(img);
+runr=row/X;
+runc=col/Y;runs=0;
+%----------------
+%automatic size of image
+auto_h=ceil(runr*2);
+auto_width=ceil(runc*2);
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+blockSizeR=auto_h;
+blockSizeC=auto_width;
+B1=X/2;
+B2=B1-1;
+%----------------
+a=img;
+ii=1;jj=1;
+for i=B1:B2*2:row% NO percent overlap
+    for  j = B1:B2*2:col
+        if j+B1<=col&&i+B1<=row%all is well
+            block=a(i-B2:i+B1,j-B2:j+B1);  
+        elseif j+B1>=col&&i+B1<=row
+            extra=(j+B1)-col;
+            block=a(i-B2:i+B1,j-extra-B2:j+B1-extra);
+        elseif i+B1>=row &&j+B1<=col
+            %index exceeds matrix dimension
+            extra=(i+B1)-row;
+            block=a(i-extra-B2:i+B1-extra,j-B2:j+B1);
+        elseif j+B1>=col&&i+B1>=row
+            extrar=(i+B1)-row;
+            extrac=(j+B1)-col;
+            block=a(i-extrar-B2:i+B1-extrar,j-extrac-B2:j+B1-extrac);
+         
+        end
+        %-------------------------
+      
+       ca{ii,jj}= num2cell(block);%figure;imshow(block)
+         jj=jj+1;
+    end
+    ii=ii+1;jj=1;
+end
+
+end
